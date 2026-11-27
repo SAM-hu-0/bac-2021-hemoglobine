@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>التصحيح المنهجي التفاعلي ثلاثي الأبعاد - بكالوريا الجزائر 2021</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #F6F4EE;
+            color: #1E293B;
+            overflow-x: hidden;
+            width: 100%;
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 560px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 220px;
+            max-height: 290px;
+        }
+        @media (min-width: 640px) {
+            .chart-container {
+                height: 255px;
+            }
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 275px;
+            }
+        }
+        .three-d-container {
+            position: relative;
+            width: 100%;
+            max-width: 660px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 280px;
+            max-height: 400px;
+            touch-action: none;
+            cursor: grab;
+        }
+        .three-d-container:active {
+            cursor: grabbing;
+        }
+        @media (min-width: 640px) {
+            .three-d-container {
+                height: 330px;
+            }
+        }
+        @media (min-width: 1024px) {
+            .three-d-container {
+                height: 365px;
+            }
+        }
+        .tab-btn {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tab-active {
+            background: linear-gradient(135deg, #163050 0%, #264B77 100%);
+            color: #FFFFFF;
+            border-color: #163050;
+            box-shadow: 0 8px 20px -5px rgba(22, 48, 80, 0.38);
+            transform: translateY(-1px);
+        }
+        .tab-inactive {
+            background-color: #FFFFFF;
+            color: #475569;
+            border-color: #E2E8F0;
+        }
+        .tab-inactive:hover {
+            background-color: #F8FAFC;
+            border-color: #CBD5E1;
+            color: #163050;
+        }
+        .fade-panel {
+            animation: panelFadeIn 0.35s ease-out forwards;
+        }
+        @keyframes panelFadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.92);
+            box-shadow: 0 6px 24px -8px rgba(15, 23, 42, 0.07);
+        }
+        input[type="range"].ph-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            border-radius: 999px;
+            background: linear-gradient(to left, #0D9488 0%, #D97706 100%);
+            outline: none;
+        }
+        input[type="range"].ph-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 3px solid #F59E0B;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+            cursor: pointer;
+            transition: transform 0.15s ease;
+        }
+        input[type="range"].ph-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.12);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-slate-900 pb-12">
+
+    <!-- Chosen Palette: Warm Academic Alabaster & Deep Navy (Background: #F6F4EE, Cards: #FFFFFF, Primary Ink: #1E293B, Brand Navy: #163050, Biological State Accents: #0D9488 Teal for State R / Lung pH 7.4 and #D97706 Amber for State T / Tissue pH 7.3) -->
+    <!-- Application Structure Plan: Designed as a responsive, 5-tab interactive educational SPA tailored for Algerian Baccalauréat students: 1) Part 1 (Comparison Matrix + Linked Hypothesis with copy button), 2) Part 2 (Enhanced 3D WebGL Protein Studio with floating 3D sprite labels for alpha1/alpha2/beta1/beta2 and His146/Asp94, continuous pH slider 7.4 to 7.3, view reset, Quaternary vs Atomic Zoom modes, synchronized Chart.js dual-axis quantitative chart, and complete Analysis/Interpretation/Discussion/CO2 Asphyxiation answer), 3) Part 3 (Three-part Scientific Text with dynamic keyword highlighting), 4) Methodology Reference Grid, and 5) Interactive 4-stage Improvement Loop + Real-time Self-Evaluation Rubric. -->
+    <!-- Visualization & Content Choices:
+         1. Interactive 3D Protein Studio (Three.js WebGL Canvas): Report Info -> Quaternary structure of Hemoglobin (alpha1, alpha2, beta1, beta2 chains, 4 Heme groups, O2 binding/release) & atomic interaction between His 146 and Asp 94 (8 Å vs 2 Å) -> Goal: Visualize continuous 3D conformational transition & ionic bond formation -> Viz: Real-time 3D ribbon helices with dynamic 3D sprite labels + atomic ball-and-stick zoom mode -> Interaction: Preset Lung/Tissue buttons, continuous pH slider (7.40 to 7.30), Quaternary/Atomic camera toggle, 360° touch/mouse orbit, view reset -> Justification: Maximizes spatial clarity without SVG.
+         2. Quantitative Comparison Bar Chart (Chart.js Canvas): Report Info -> Blood pH (7.4 vs 7.3) and inter-residue distance (8 Å vs 2 Å) -> Goal: Compare physiological vs molecular metrics -> Viz: Dual-axis Bar Chart with 16-char label wrapping and required tooltip config -> Interaction: Dynamic bar emphasis synced with 3D state -> Justification: Reinforces exact report numbers inside a responsive container.
+         3. Structured Tables, Keyword Highlighter & Interactive Improvement Loop (HTML/CSS/JS): Report Info -> Bac methodology & grading indicators -> Goal: Organize & Self-Assess -> Interaction: One-click copy, keyword highlighting, interactive rubric checklist -> Justification: Fast, mobile-friendly exam revision.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <div id="toast-banner" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-full shadow-2xl border border-slate-700 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center gap-2">
+        <span class="text-emerald-400">✔</span>
+        <span id="toast-text">تم النسخ بنجاح</span>
+    </div>
+
+    <header class="bg-gradient-to-l from-[#10233B] via-[#163050] to-[#214570] text-white shadow-lg sticky top-0 z-30 border-b border-slate-700/60">
+        <div class="max-w-6xl mx-auto px-3 sm:px-6 py-3 sm:py-3.5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2.5">
+            <div>
+                <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 text-amber-300 text-[11px] sm:text-xs font-bold tracking-wide">
+                    <span class="bg-white/10 px-2 py-0.5 rounded-md border border-white/10">🇩🇿 بكالوريا الجزائر 2021</span>
+                    <span>•</span>
+                    <span>شعبة الرياضيات</span>
+                    <span>•</span>
+                    <span>علوم الطبيعة والحياة (12 نقطة)</span>
+                </div>
+                <h1 class="text-base sm:text-xl md:text-2xl font-black mt-1 leading-snug tracking-tight">
+                    التصحيح المنهجي التفاعلي ثلاثي الأبعاد: بنية الهيموغلوبين ووظيفته
+                </h1>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 self-start lg:self-auto">
+                <span class="inline-flex items-center gap-1.5 bg-cyan-500/20 text-cyan-200 border border-cyan-400/30 px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-bold">
+                    <span>🧊</span>
+                    <span>مختبر بروتيني 3D مع تسميات حية</span>
+                </span>
+                <span id="header-progress-pill" class="inline-flex items-center gap-1.5 bg-amber-500/20 text-amber-200 border border-amber-400/30 px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-bold">
+                    <span>🎯</span>
+                    <span>الإتقان: 0%</span>
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-3 sm:px-6 py-5 sm:py-7 space-y-5 sm:space-y-6">
+
+        <section class="glass-card rounded-2xl p-4 sm:p-6">
+            <div class="flex items-start gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#163050] to-[#264B77] text-white flex items-center justify-center text-lg sm:text-xl shrink-0 shadow-sm">
+                    🧬
+                </div>
+                <div>
+                    <h2 class="text-base sm:text-lg font-extrabold text-[#163050]">مدخل إلى التمرين والمنصة التفاعلية ثلاثية الأبعاد</h2>
+                    <p class="text-xs sm:text-sm md:text-base text-slate-600 mt-1 leading-relaxed">
+                        تتوقف الوظيفة المتخصصة للبروتينات على بنيتها الفراغية المستقرة. يدرس هذا التمرين العلاقة بين <strong>البنية الرابعية ثلاثية الأبعاد للهيموغلوبين</strong> وقدرته على تثبيت ثنائي الأكسجين (O<sub>2</sub>) في الرئتين وتحريره في الأنسجة، مبرزاً تأثير <strong>درجة حموضة الوسط (pH)</strong>. تنقّل بين التبويبات أدناه لاستكشاف الإجابات النموذجية والمحاكي الجزيئي ثلاثي الأبعاد.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <nav class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-2.5" aria-label="أقسام التصحيح">
+            <button onclick="switchTab('part1')" id="btn-part1" class="tab-btn tab-active py-2.5 sm:py-3 px-2.5 sm:px-3 rounded-xl font-bold text-xs sm:text-sm border flex items-center justify-center gap-1.5 text-center min-h-[46px]">
+                <span>1️⃣</span>
+                <span>المقارنة والفرضية</span>
+            </button>
+            <button onclick="switchTab('part2')" id="btn-part2" class="tab-btn tab-inactive py-2.5 sm:py-3 px-2.5 sm:px-3 rounded-xl font-bold text-xs sm:text-sm border flex items-center justify-center gap-1.5 text-center min-h-[46px]">
+                <span>🧊</span>
+                <span>المحاكي 3D والتفسير</span>
+            </button>
+            <button onclick="switchTab('part3')" id="btn-part3" class="tab-btn tab-inactive py-2.5 sm:py-3 px-2.5 sm:px-3 rounded-xl font-bold text-xs sm:text-sm border flex items-center justify-center gap-1.5 text-center min-h-[46px]">
+                <span>3️⃣</span>
+                <span>النص العلمي</span>
+            </button>
+            <button onclick="switchTab('method')" id="btn-method" class="tab-btn tab-inactive py-2.5 sm:py-3 px-2.5 sm:px-3 rounded-xl font-bold text-xs sm:text-sm border flex items-center justify-center gap-1.5 text-center min-h-[46px]">
+                <span>🧭</span>
+                <span>شبكة المنهجية</span>
+            </button>
+            <button onclick="switchTab('loop')" id="btn-loop" class="col-span-2 sm:col-span-1 tab-btn tab-inactive py-2.5 sm:py-3 px-2.5 sm:px-3 rounded-xl font-bold text-xs sm:text-sm border flex items-center justify-center gap-1.5 text-center min-h-[46px]">
+                <span>🔄</span>
+                <span>حلقة التحسين</span>
+            </button>
+        </nav>
+
+        <!-- TAB 1: PART 1 -->
+        <section id="tab-part1" class="fade-panel space-y-5 sm:space-y-6">
+            <div class="glass-card rounded-2xl p-4 sm:p-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/80 pb-4 mb-5">
+                    <div>
+                        <span class="text-[11px] sm:text-xs font-extrabold text-amber-800 bg-amber-100/90 px-2.5 py-0.5 rounded-md">الجزء الأول (04 نقاط)</span>
+                        <h2 class="text-lg sm:text-xl font-extrabold text-[#163050] mt-1">استغلال الوثيقة (1) وصياغة الفرضية التفسيرية</h2>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                            يقدّم هذا القسم المقارنة المنهجية بين البنية (R) والبنية (T) لجزيئة الهيموغلوبين انطلاقاً من الوثيقة (1)، متبوعة بالاستنتاج وجملة الربط التي تمهّد للفرضية التفسيرية.
+                        </p>
+                    </div>
+                    <button onclick="copySectionText('part1-copy-source', 'تم نسخ إجابة الجزء الأول')" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-bold transition self-start shrink-0 min-h-[40px] flex items-center gap-1.5">
+                        <span>📋</span>
+                        <span>نسخ الإجابة</span>
+                    </button>
+                </div>
+
+                <div id="part1-copy-source" class="space-y-5">
+                    <div class="bg-slate-50/90 p-3.5 sm:p-4 rounded-xl border-r-4 border-[#163050]">
+                        <span class="text-[11px] sm:text-xs font-extrabold text-[#163050] block mb-1">خطوة منهجية أساسية: التعريف بالوثيقة</span>
+                        <p class="text-xs sm:text-sm text-slate-800 leading-relaxed">
+                            تمثّل <strong>الوثيقة (1)</strong> البنية الفراغية الرابعية لجزيئة الهيموغلوبين مرفقةً برسمين تخطيطيين لحالتيها الوظيفيتين المختلفتين: <strong>البنية (R)</strong> و<strong>البنية (T)</strong>.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-extrabold text-sm sm:text-base text-slate-900 mb-3 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full bg-[#163050] text-white text-xs flex items-center justify-center">1</span>
+                            <span>المقارنة بين البنية (R) والبنية (T) لجزيئة الهيموغلوبين:</span>
+                        </h3>
+                        <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-sm">
+                            <table class="w-full text-xs sm:text-sm text-right min-w-[480px]">
+                                <thead class="bg-[#163050] text-white">
+                                    <tr>
+                                        <th class="py-3 px-3 sm:px-4 font-bold w-1/4">معيار المقارنة</th>
+                                        <th class="py-3 px-3 sm:px-4 font-bold w-3/8">البنية (R) — الحالة الأولى</th>
+                                        <th class="py-3 px-3 sm:px-4 font-bold w-3/8">البنية (T) — الحالة الثانية</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 bg-white">
+                                    <tr class="bg-amber-50/40">
+                                        <td class="py-3 px-3 sm:px-4 font-bold text-slate-800">أوجه التشابه</td>
+                                        <td colspan="2" class="py-3 px-3 sm:px-4 text-slate-700 leading-relaxed">
+                                            تتكوّن كلتا البنيتين من <strong>4 سلاسل ببتيدية</strong> (α<sub>1</sub>, α<sub>2</sub>, β<sub>1</sub>, β<sub>2</sub>) تحافظ على تماسكها <strong>روابط كارهة للماء</strong>.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-3 sm:px-4 font-bold text-slate-800">الروابط الإضافية وتوضع السلاسل</td>
+                                        <td class="py-3 px-3 sm:px-4 text-teal-900 bg-teal-50/30 leading-relaxed">
+                                            <strong>غياب</strong> الروابط الإضافية ⟵ <strong>تباعد</strong> السلاسل الببتيدية.
+                                        </td>
+                                        <td class="py-3 px-3 sm:px-4 text-amber-950 bg-amber-50/30 leading-relaxed">
+                                            <strong>تشكّل</strong> روابط كيميائية إضافية بين السلاسل ⟵ <strong>تقارب</strong> السلاسل الببتيدية.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-3 sm:px-4 font-bold text-slate-800">الحالة الوظيفية تجاه O<sub>2</sub></td>
+                                        <td class="py-3 px-3 sm:px-4 text-teal-900 font-bold">
+                                            تثبيت جزيئات ثنائي الأكسجين (O<sub>2</sub>).
+                                        </td>
+                                        <td class="py-3 px-3 sm:px-4 text-amber-950 font-bold">
+                                            تحرير جزيئات ثنائي الأكسجين (O<sub>2</sub>).
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-l from-teal-50 to-emerald-50/60 border border-teal-200 rounded-xl p-4">
+                        <span class="font-extrabold text-teal-900 text-xs sm:text-sm block mb-1">📌 الاستنتاج:</span>
+                        <p class="text-xs sm:text-sm text-teal-950 font-semibold leading-relaxed">
+                            يغيّر الهيموغلوبين بنيته الفراغية بين (R) و(T) لتأدية وظيفة مزدوجة (تثبيت O<sub>2</sub> ثم تحريره) حسب شروط الوسط.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-extrabold text-sm sm:text-base text-slate-900 mb-3 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full bg-[#163050] text-white text-xs flex items-center justify-center">2</span>
+                            <span>صياغة الفرضية التفسيرية (وفق التسلسل المنهجي المنقّح):</span>
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="bg-slate-100/90 border-r-4 border-slate-500 p-3.5 sm:p-4 rounded-xl">
+                                <span class="text-[11px] sm:text-xs font-extrabold text-slate-600 block mb-1">🔗 جملة الربط المنهجية (قبل الفرضية مباشرة):</span>
+                                <p class="text-xs sm:text-sm text-slate-800 leading-relaxed">
+                                    وبما أن انتقال الهيموغلوبين بين البنيتين (R) و(T) يرتبط بتبدّل وضعيات السلاسل وتبادل O<sub>2</sub>، فإننا نطرح الفرضية التالية لتفسير سبب هذا التغيّر البنيوي:
+                                </p>
+                            </div>
+                            <div class="bg-gradient-to-l from-amber-50 to-orange-50/50 border-2 border-amber-400 p-4 rounded-xl shadow-sm">
+                                <span class="text-[11px] sm:text-xs font-extrabold text-amber-800 block mb-1">💡 الفرضية المقترحة (قصيرة، دقيقة، وقابلة للاختبار):</span>
+                                <p class="text-sm sm:text-base font-extrabold text-slate-900 leading-relaxed">
+                                    يتغيّر شكل الهيموغلوبين (R ⟷ T) بتشكّل أو انقطاع روابط شاردية بين سلاسله حسب pH الوسط.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: PART 2 WITH ENHANCED 3D PROTEIN STUDIO -->
+        <section id="tab-part2" class="hidden fade-panel space-y-5 sm:space-y-6">
+            <div class="glass-card rounded-2xl p-4 sm:p-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/80 pb-4 mb-5">
+                    <div>
+                        <span class="text-[11px] sm:text-xs font-extrabold text-teal-800 bg-teal-100/80 px-2.5 py-0.5 rounded-md">الجزء الثاني (06 نقاط)</span>
+                        <h2 class="text-lg sm:text-xl font-extrabold text-[#163050] mt-1">المحاكي الجزيئي ثلاثي الأبعاد (3D) واستغلال الوثيقة (2)</h2>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                            تحكّم تدريجياً في قيمة الـ <strong>pH (من 7.40 إلى 7.30)</strong> أو بدّل بين <strong>البنية الرابعية (α<sub>1</sub>, α<sub>2</sub>, β<sub>1</sub>, β<sub>2</sub>)</strong> و<strong>التكبير الذري (His 146 ⟷ Asp 94)</strong> لمشاهدة التحول البنيوي وتشكّل الرابطة الشاردية في الزمن الحقيقي.
+                        </p>
+                    </div>
+                    <button onclick="copySectionText('part2-copy-source', 'تم نسخ إجابة الجزء الثاني')" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-bold transition self-start shrink-0 min-h-[40px] flex items-center gap-1.5">
+                        <span>📋</span>
+                        <span>نسخ الإجابة</span>
+                    </button>
+                </div>
+
+                <!-- 3D Interactive Molecular Studio -->
+                <div class="bg-gradient-to-br from-slate-950 via-[#0E1D30] to-slate-900 text-white rounded-2xl p-3.5 sm:p-6 mb-6 shadow-xl border border-slate-800">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-4">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[11px] font-bold">WebGL 3D Molecular Engine</span>
+                                <h3 class="text-sm sm:text-base md:text-lg font-extrabold text-amber-300">المختبر التفاعلي ثلاثي الأبعاد لبنية الهيموغلوبين</h3>
+                            </div>
+                            <p class="text-[11px] sm:text-xs text-slate-300 mt-1">اسحب لتدوير الجزيئة بزاوية 360° • حرّك شريط الـ pH لملاحظة الانتقال التدريجي بين البنيتين</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 w-full sm:w-auto">
+                            <button onclick="setBioState('R')" id="sim-btn-R" class="px-3 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-teal-600 text-white shadow-lg ring-2 ring-teal-300 transition min-h-[44px]">
+                                🫁 الرئتان (pH = 7.4)
+                            </button>
+                            <button onclick="setBioState('T')" id="sim-btn-T" class="px-3 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-slate-800 text-slate-300 hover:bg-slate-700 transition min-h-[44px]">
+                                💪 الأنسجة (pH = 7.3)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Continuous pH Slider Bar -->
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 mb-4">
+                        <div class="flex items-center justify-between text-xs sm:text-sm font-bold mb-2">
+                            <span class="text-teal-300">pH = 7.40 (البنية R)</span>
+                            <span id="live-ph-readout" class="bg-slate-800 px-3 py-0.5 rounded-full border border-slate-700 text-amber-300 font-mono">
+                                pH = 7.40 | المسافة = 8.0 Å
+                            </span>
+                            <span class="text-amber-400">pH = 7.30 (البنية T)</span>
+                        </div>
+                        <input id="ph-morph-slider" type="range" min="0" max="100" value="0" oninput="onPhSliderChange(this.value)" class="ph-slider w-full" aria-label="التحكم في درجة الحموضة pH">
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+                        <!-- 3D Viewport Column -->
+                        <div class="lg:col-span-7 bg-slate-900/90 rounded-xl border border-slate-700/80 p-3 flex flex-col justify-between relative overflow-hidden">
+                            <div class="flex flex-wrap items-center justify-between gap-2 mb-2 z-10">
+                                <div class="inline-flex rounded-lg bg-slate-800/90 p-1 border border-slate-700">
+                                    <button onclick="set3DCameraMode('quaternary')" id="cam-btn-quat" class="px-2.5 py-1 rounded-md text-[11px] sm:text-xs font-bold bg-cyan-600 text-white transition">
+                                        🧬 البنية الرابعية (4 سلاسل)
+                                    </button>
+                                    <button onclick="set3DCameraMode('atomic')" id="cam-btn-atom" class="px-2.5 py-1 rounded-md text-[11px] sm:text-xs font-bold text-slate-300 hover:text-white transition">
+                                        🔬 تكبير ذري (His146 - Asp94)
+                                    </button>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <button onclick="toggleAutoRotate()" id="rotate-toggle-btn" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-[11px] text-slate-200 font-semibold transition">
+                                        🔄 دوران: مفعّل
+                                    </button>
+                                    <button onclick="reset3DView()" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-[11px] text-slate-200 font-semibold transition" title="إعادة ضبط الزاوية">
+                                        🎯 ضبط
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="protein-3d-wrapper" class="three-d-container rounded-lg bg-[radial-gradient(circle_at_center,_#162C46_0%,_#09121E_100%)] border border-slate-800/90 overflow-hidden">
+                                <canvas id="protein3dCanvas" class="w-full h-full block"></canvas>
+                                <div id="canvas-overlay-badge" class="absolute top-2.5 right-2.5 bg-slate-950/85 backdrop-blur-sm border border-teal-500/40 text-teal-300 px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-extrabold pointer-events-none">
+                                    البنية (R) — تثبيت O<sub>2</sub> (8 Å)
+                                </div>
+                                <div id="canvas-legend" class="absolute bottom-2 right-2 left-2 flex flex-wrap items-center justify-center gap-2 sm:gap-3 bg-slate-950/80 backdrop-blur-sm px-2.5 py-1.5 rounded-lg border border-slate-800 text-[10px] sm:text-[11px] text-slate-200 pointer-events-none">
+                                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block"></span> سلسلتا α<sub>1</sub>, α<sub>2</sub></span>
+                                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span> سلسلتا β<sub>1</sub>, β<sub>2</sub></span>
+                                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span> مجموعات الهيم + O<sub>2</sub></span>
+                                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></span> روابط شاردية (T)</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-2.5 bg-slate-950/75 rounded-lg p-2.5 border border-slate-800 text-center">
+                                <p id="sim-explanation-line" class="text-xs sm:text-sm font-bold text-teal-300 leading-relaxed">
+                                    عند pH = 7.4: يفقد His 146 بروتونه (متعادل)، تنعدم الرابطة الشاردية (8 Å)، تتباعد السلاسل الأربع وتثبّت 4 جزيئات O<sub>2</sub>.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Synchronized Quantitative Chart Column -->
+                        <div class="lg:col-span-5 bg-white text-slate-800 rounded-xl p-3 sm:p-4 flex flex-col justify-between shadow-inner">
+                            <div>
+                                <h4 class="text-xs sm:text-sm font-extrabold text-[#163050] text-center mb-1">
+                                    مقارنة كمية: pH الدم والمسافة بين His 146 و Asp 94
+                                </h4>
+                                <p class="text-[11px] text-slate-500 text-center mb-2">
+                                    مخطط متزامن يربط حموضة الوسط بالمسافة الذرية (بالأنغستروم Å)
+                                </p>
+                            </div>
+                            <div class="chart-container my-auto">
+                                <canvas id="hbComparisonChart"></canvas>
+                            </div>
+                            <div class="mt-2 pt-2 border-t border-slate-100 grid grid-cols-2 gap-2 text-center text-[11px]">
+                                <div class="bg-teal-50 text-teal-900 rounded-lg p-1.5 font-bold border border-teal-200/70">
+                                    الحالة R: pH 7.4 | المسافة 8 Å
+                                </div>
+                                <div class="bg-amber-50 text-amber-900 rounded-lg p-1.5 font-bold border border-amber-200/70">
+                                    الحالة T: pH 7.3 | المسافة 2 Å
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Written Model Answer for Part 2 -->
+                <div id="part2-copy-source" class="space-y-5">
+                    <div class="border-r-4 border-[#163050] pr-3.5 sm:pr-4">
+                        <h3 class="font-extrabold text-sm sm:text-base text-[#163050] mb-2">1. تحليل الشكل (أ) من الوثيقة (2) وإبراز سبب تغيّر pH الدم:</h3>
+                        <p class="text-xs sm:text-sm text-slate-700 leading-relaxed mb-2">
+                            يمثّل <strong>الشكل (أ)</strong> مخططاً تفسيرياً لآلية تغيّر درجة حموضة الدم (pH) وعلاقتها ببنية الهيموغلوبين بين الرئتين والخلايا:
+                        </p>
+                        <ul class="list-disc list-inside space-y-1.5 text-xs sm:text-sm text-slate-800 leading-relaxed">
+                            <li><strong>على مستوى الرئتين (الدم الصادر):</strong> يكون <strong>pH = 7.4</strong>، فيأخذ الهيموغلوبين <strong>البنية (R)</strong> ويثبّت ثنائي الأكسجين (O<sub>2</sub>).</li>
+                            <li><strong>على مستوى الخلايا (الدم الوارد):</strong> ينخفض الـ pH إلى <strong>7.3</strong>، فيتحوّل الهيموغلوبين إلى <strong>البنية (T)</strong> ويحرّر O<sub>2</sub> للخلايا.</li>
+                            <li><strong>سبب تغيّر pH الدم:</strong> تطرح الخلايا غاز الفحم (CO<sub>2</sub>) الناتج عن التنفس الخلوي، فيتفاعل مع ماء البلازما وفق المعادلة:
+                                <span dir="ltr" class="inline-block bg-slate-100 px-2.5 py-0.5 rounded font-mono font-bold text-[#163050] my-1">CO<sub>2</sub> + H<sub>2</sub>O ⟶ H<sup>+</sup> + HCO<sub>3</sub><sup>-</sup></span>
+                                يؤدي تحرير البروتونات (H<sup>+</sup>) إلى رفع حموضة الوسط وبالتالي انخفاض pH الدم من 7.4 إلى 7.3.
+                            </li>
+                        </ul>
+                        <p class="mt-2.5 text-xs sm:text-sm font-bold text-teal-900 bg-teal-50 p-2.5 rounded-lg border border-teal-200">
+                            📌 الاستنتاج: انخفاض pH الدم يحفّز تحوّل الهيموغلوبين من البنية (R) إلى البنية (T) لتحرير O<sub>2</sub>.
+                        </p>
+                    </div>
+
+                    <div class="border-r-4 border-teal-600 pr-3.5 sm:pr-4">
+                        <h3 class="font-extrabold text-sm sm:text-base text-teal-900 mb-2">2. أ- تفسير الرسومات التوضيحية الموضحة في الشكل (ب):</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-xs sm:text-sm">
+                            <div class="bg-teal-50/70 p-3.5 rounded-xl border border-teal-200 leading-relaxed">
+                                <span class="font-extrabold text-teal-950 block mb-1">في البنية (R) عند pH = 7.4 (انخفاض تركيز H<sup>+</sup>):</span>
+                                يفقد جذر الحمض الأميني القاعدي (<strong>His 146</strong>) بروتونه (H<sup>+</sup>) فيصبح <strong>متعادلاً كهربائياً</strong>، بينما يحافظ جذر الحمض الأميني الحامضي (<strong>Asp 94</strong>) على شحنته السالبة (<strong>-</strong>). وبغياب الشحنتين المتعاكستين <strong>لا تتشكّل رابطة شاردية</strong>، فيبقى الحمضان متباعدين بمسافة <strong>8 Å</strong> وتبقى السلاسل متباعدة في البنية (R) المثبّتة لـ O<sub>2</sub>.
+                            </div>
+                            <div class="bg-amber-50/70 p-3.5 rounded-xl border border-amber-200 leading-relaxed">
+                                <span class="font-extrabold text-amber-950 block mb-1">في البنية (T) عند pH = 7.3 (ارتفاع تركيز H<sup>+</sup>):</span>
+                                يسلك جذر (<strong>His 146</strong>) سلوك قاعدة فيكتسب بروتوناً (H<sup>+</sup>) وتظهر عليه شحنة موجبة (<strong>+</strong>). تتشكّل <strong>رابطة شاردية</strong> بين الشحنة الموجبة لـ (His 146) والشحنة السالبة لـ (Asp 94)، مما يقرّبهما إلى مسافة <strong>2 Å</strong>، فتتقارب السلاسل الببتيدية ويكتسب الهيموغلوبين البنية (T) المحرّرة لـ O<sub>2</sub>.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-emerald-50 border border-emerald-300 rounded-xl p-4">
+                        <h3 class="font-extrabold text-sm sm:text-base text-emerald-950 mb-1">2. ب- مناقشة صحة الفرضية المقترحة سابقاً:</h3>
+                        <p class="text-xs sm:text-sm text-emerald-950 leading-relaxed">
+                            إن تغيّر pH الدم (من 7.4 إلى 7.3) يغيّر الحالة الكهربائية لجذر الحمض الأميني (His 146)، مما يتحكّم في تشكّل أو انقطاع الرابطة الشاردية مع (Asp 94)، وبالتالي تحوّل الهيموغلوبين بين البنيتين (R) و(T). <strong>وهذا ما يؤكّد صحة الفرضية المقترحة.</strong>
+                        </p>
+                    </div>
+
+                    <div class="bg-rose-50 border border-rose-200 rounded-xl p-4">
+                        <h3 class="font-extrabold text-sm sm:text-base text-rose-950 mb-1">3. خطورة انخفاض pH الدم على سلامة العضوية عند الاختناق بغاز الفحم (CO<sub>2</sub>):</h3>
+                        <p class="text-xs sm:text-sm text-rose-950 leading-relaxed">
+                            يؤدي ارتفاع تركيز CO<sub>2</sub> في الدم إلى زيادة إنتاج البروتونات (H<sup>+</sup>) وانخفاض حاد ومستمر في pH الدم، فيبقى جذر (His 146) متأيناً (<strong>+</strong>) والروابط الشاردية متشكلة باستمرار. يُحتجز الهيموغلوبين في <strong>البنية (T)</strong> ويفقد قدرته على التحوّل إلى البنية (R) لتثبيت O<sub>2</sub> على مستوى الرئتين، فتُحرم الخلايا من O<sub>2</sub> ويتوقف التنفس الخلوي (إنتاج الطاقة ATP) مما يؤدي إلى الموت اختناقاً.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: PART 3 SCIENTIFIC TEXT -->
+        <section id="tab-part3" class="hidden fade-panel space-y-5 sm:space-y-6">
+            <div class="glass-card rounded-2xl p-4 sm:p-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/80 pb-4 mb-5">
+                    <div>
+                        <span class="text-[11px] sm:text-xs font-extrabold text-indigo-800 bg-indigo-100/80 px-2.5 py-0.5 rounded-md">الجزء الثالث (02 نقطتان)</span>
+                        <h2 class="text-lg sm:text-xl font-extrabold text-[#163050] mt-1">النص العلمي المهيكل</h2>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">
+                            نموذج متكامل (مقدمة + إشكالية، عرض منظم، خاتمة) يبرز العلاقة بين بنية البروتين ووظيفته وتأثرها بعوامل الوسط.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2 self-start shrink-0">
+                        <button onclick="toggleKeywords()" id="kw-btn" class="px-3.5 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-950 font-bold text-xs border border-amber-300 transition min-h-[40px]">
+                            ✨ تظليل الكلمات المفتاحية
+                        </button>
+                        <button onclick="copySectionText('scientific-text-body', 'تم نسخ النص العلمي')" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-bold transition min-h-[40px] flex items-center gap-1.5">
+                            <span>📋</span>
+                            <span>نسخ النص</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="scientific-text-body" class="space-y-4 text-xs sm:text-sm md:text-base leading-loose text-slate-800">
+                    <div class="bg-slate-50 p-4 rounded-xl border-r-4 border-[#163050]">
+                        <span class="text-[11px] sm:text-xs font-extrabold text-[#163050] block mb-1">1. المقدمة (تمهيد + إشكالية):</span>
+                        <p>
+                            تتوقف الوظيفة المتخصصة للبروتينات على <span class="kw font-semibold">بنيتها الفراغية المستقرة</span> التي تتأثر بعوامل الوسط. <strong class="text-[#163050]">فكيف تكتسب البروتينات بنيتها الفراغية الوظيفية، وكيف تؤثر عوامل الوسط على هذه العلاقة؟</strong>
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 space-y-3 shadow-sm">
+                        <span class="text-[11px] sm:text-xs font-extrabold text-teal-800 block">2. العرض (التوسع المنظم):</span>
+                        <p>
+                            يتحدّد <span class="kw font-semibold">التخصص الوظيفي للبروتين</span> بفضل بنيته الفراغية الناتجة عن انطواء السلسلة الببتيدية (أو السلاسل الببتيدية) وفق <span class="kw font-semibold">عدد ونوع وترتيب الأحماض الأمينية</span> المحددة وراثياً.
+                        </p>
+                        <p>
+                            تحافظ على ثبات هذه البنية <span class="kw font-semibold">روابط كيميائية</span> تنشأ في مواقع محددة بين جذور الأحماض الأمينية، منها روابط تكافؤية قوية (<span class="kw font-semibold">جسور ثنائية الكبريت</span>) وروابط ضعيفة (<span class="kw font-semibold">هيدروجينية، كارهة للماء، وشاردية</span> بين الجذور الحامضية السالبة والقاعدية الموجبة).
+                        </p>
+                        <p>
+                            تتأثر الروابط الضعيفة (خاصة الشاردية والهيدروجينية) بعوامل الوسط كدرجة الـ <span class="kw font-semibold">pH</span> والحرارة:
+                        </p>
+                        <ul class="list-disc list-inside space-y-1.5 pr-2 text-slate-700">
+                            <li><strong>ضمن المجال الفيزيولوجي:</strong> يسبّب التغيّر الطفيف والعكسي للـ pH تغيّراً في الحالة الكهربائية لبعض الجذور (<span class="kw font-semibold">الخاصية الحمقلية</span>)، فتتشكّل أو تنقطع روابط شاردية تسمح بتغيّر بنيوي وظيفي عكسي (مثل تحوّل الهيموغلوبين بين R و T).</li>
+                            <li><strong>خارج المجال الفيزيولوجي:</strong> يؤدي التغيّر الكبير في الـ pH أو الحرارة إلى كسر الروابط المثبتة للبنية، فيفقد البروتين بنيته الفراغية الطبيعية (<span class="kw font-semibold">تخرّب البروتين</span>) ويفقد وظيفته نهائياً.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-teal-50/70 p-4 rounded-xl border-r-4 border-teal-600">
+                        <span class="text-[11px] sm:text-xs font-extrabold text-teal-900 block mb-1">3. الخاتمة (خلاصة تركيبية):</span>
+                        <p>
+                            تفرض المعلومة الوراثية بنية فراغية دقيقة للبروتين تثبّتها روابط بين الجذور وتمنحه وظيفته، ويبقى استقرار هذه البنية وفعاليتها مرهوناً بشروط الوسط الفيزيولوجية الملائمة.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: METHODOLOGY GRID -->
+        <section id="tab-method" class="hidden fade-panel space-y-5 sm:space-y-6">
+            <div class="glass-card rounded-2xl p-4 sm:p-6">
+                <div class="border-b border-slate-200/80 pb-4 mb-5">
+                    <span class="text-[11px] sm:text-xs font-extrabold text-slate-700 bg-slate-200/80 px-2.5 py-0.5 rounded-md">دليل المنهجية الرسمية</span>
+                    <h2 class="text-lg sm:text-xl font-extrabold text-[#163050] mt-1">مؤشرات الإجابة الكاملة والأخطاء الشائعة</h2>
+                    <p class="text-xs sm:text-sm text-slate-600 mt-1">
+                        مرجع سريع يربط كل فعل أدائي في مواضيع البكالوريا بالخطوات المطلوبة في سلم التنقيط لتفادي ضياع النقاط.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70 hover:border-[#163050]/40 transition">
+                        <div class="flex items-center gap-2 font-extrabold text-[#163050] text-sm sm:text-base mb-2">
+                            <span>📊</span>
+                            <span>1. قارن (الوثيقة 1)</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-700 mb-2 leading-relaxed">
+                            <strong>المطلوب:</strong> التعريف بالوثيقة + جدول يبرز أوجه التشابه وأوجه الاختلاف + استنتاج.
+                        </p>
+                        <p class="text-xs text-rose-700 font-bold bg-rose-50 px-2.5 py-1.5 rounded-lg">
+                            ⚠️ خطأ شائع: الاكتفاء بوصف كل بنية على حدة دون جدول أو نسيان الاستنتاج.
+                        </p>
+                    </div>
+
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70 hover:border-[#163050]/40 transition">
+                        <div class="flex items-center gap-2 font-extrabold text-[#163050] text-sm sm:text-base mb-2">
+                            <span>💡</span>
+                            <span>2. قدّم فرضية تفسيرية</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-700 mb-2 leading-relaxed">
+                            <strong>المطلوب:</strong> جملة ربط منطقية بعد الاستنتاج + فرضية واحدة مختصرة ودقيقة وقابلة للاختبار.
+                        </p>
+                        <p class="text-xs text-rose-700 font-bold bg-rose-50 px-2.5 py-1.5 rounded-lg">
+                            ⚠️ خطأ شائع: كتابة عدة فرضيات متناقضة أو طرح الفرضية دون ربطها بالاستنتاج السابق.
+                        </p>
+                    </div>
+
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70 hover:border-[#163050]/40 transition">
+                        <div class="flex items-center gap-2 font-extrabold text-[#163050] text-sm sm:text-base mb-2">
+                            <span>🔬</span>
+                            <span>3. حلّل ثم فسّر (الوثيقة 2)</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-700 mb-2 leading-relaxed">
+                            <strong>المطلوب:</strong> في التحليل نذكر الظواهر والأرقام (pH = 7.4 و 7.3)؛ وفي التفسير نشرح الآلية الجزيئية (تأين His 146 وتشكّل الرابطة الشاردية 2 Å).
+                        </p>
+                        <p class="text-xs text-rose-700 font-bold bg-rose-50 px-2.5 py-1.5 rounded-lg">
+                            ⚠️ خطأ شائع: الخلط بين التحليل والتفسير أو إغفال القيم الرقمية (8 Å و 2 Å).
+                        </p>
+                    </div>
+
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70 hover:border-[#163050]/40 transition">
+                        <div class="flex items-center gap-2 font-extrabold text-[#163050] text-sm sm:text-base mb-2">
+                            <span>✍️</span>
+                            <span>4. لخّص في نص علمي</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-700 mb-2 leading-relaxed">
+                            <strong>المطلوب:</strong> مقدمة تنتهي بإشكالية + عرض منظم بأفكار متسلسلة + خاتمة مختصرة تجيب عن الإشكالية.
+                        </p>
+                        <p class="text-xs text-rose-700 font-bold bg-rose-50 px-2.5 py-1.5 rounded-lg">
+                            ⚠️ خطأ شائع: كتابة النص كفقرة واحدة دون هيكلة أو إغفال طرح الإشكالية في المقدمة.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: CONTINUOUS IMPROVEMENT LOOP -->
+        <section id="tab-loop" class="hidden fade-panel space-y-5 sm:space-y-6">
+            <div class="glass-card rounded-2xl p-4 sm:p-6">
+                <div class="border-b border-slate-200/80 pb-4 mb-5">
+                    <span class="text-[11px] sm:text-xs font-extrabold text-emerald-800 bg-emerald-100/80 px-2.5 py-0.5 rounded-md">منهجية التطوير المستمر</span>
+                    <h2 class="text-lg sm:text-xl font-extrabold text-[#163050] mt-1">حلقة التحسين المستمر والتقييم الذاتي لإجابتك</h2>
+                    <p class="text-xs sm:text-sm text-slate-600 mt-1">
+                        اضغط على كل مرحلة من مراحل الحلقة لمعرفة كيف ترتقي بإجابتك، ثم قيّم مسودتك باستخدام قائمة التحقق التفاعلية.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 mb-5">
+                    <button onclick="selectLoopStep(1)" id="loop-step-1" class="p-3 sm:p-4 rounded-xl border-2 border-[#163050] bg-[#163050] text-white text-right transition min-h-[76px]">
+                        <div class="text-xs font-bold opacity-80">المرحلة 01</div>
+                        <div class="text-sm sm:text-base font-extrabold mt-0.5">🔍 الملاحظة</div>
+                    </button>
+                    <button onclick="selectLoopStep(2)" id="loop-step-2" class="p-3 sm:p-4 rounded-xl border-2 border-slate-200 bg-white text-slate-800 hover:border-slate-300 text-right transition min-h-[76px]">
+                        <div class="text-xs font-bold text-slate-500">المرحلة 02</div>
+                        <div class="text-sm sm:text-base font-extrabold mt-0.5">🛠️ التصحيح</div>
+                    </button>
+                    <button onclick="selectLoopStep(3)" id="loop-step-3" class="p-3 sm:p-4 rounded-xl border-2 border-slate-200 bg-white text-slate-800 hover:border-slate-300 text-right transition min-h-[76px]">
+                        <div class="text-xs font-bold text-slate-500">المرحلة 03</div>
+                        <div class="text-sm sm:text-base font-extrabold mt-0.5">✅ التحقق</div>
+                    </button>
+                    <button onclick="selectLoopStep(4)" id="loop-step-4" class="p-3 sm:p-4 rounded-xl border-2 border-slate-200 bg-white text-slate-800 hover:border-slate-300 text-right transition min-h-[76px]">
+                        <div class="text-xs font-bold text-slate-500">المرحلة 04</div>
+                        <div class="text-sm sm:text-base font-extrabold mt-0.5">📌 التعميم</div>
+                    </button>
+                </div>
+
+                <div id="loop-detail-box" class="bg-slate-50 border border-slate-200 rounded-xl p-4 sm:p-5 mb-6">
+                    <h3 id="loop-detail-title" class="text-sm sm:text-base font-extrabold text-[#163050] mb-1.5">
+                        1. الملاحظة وتشخيص الفجوة
+                    </h3>
+                    <p id="loop-detail-desc" class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        قارن مسودة إجابتك مع التعليمة بدقة: هل أجبت عن الفعل الأداتي المطلوب (قارن، فسّر، ناقش)؟ وهل ربطت الاستنتاج بالفرضية بجملة انتقال واضحة دون حشو أو إطالة؟
+                    </p>
+                </div>
+
+                <div class="bg-amber-50/60 border border-amber-200 rounded-2xl p-4 sm:p-5">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                        <h3 class="text-sm sm:text-base font-extrabold text-amber-950">📋 بطاقة التقييم الذاتي لإجابتك (اضغط للتحقق):</h3>
+                        <span id="score-badge" class="inline-block bg-white border border-amber-300 text-amber-950 font-extrabold text-xs px-3 py-1 rounded-full self-start sm:self-auto">
+                            الجاهزية: 0 / 6 مؤشرات
+                        </span>
+                    </div>
+
+                    <div class="w-full bg-amber-200/60 h-2.5 rounded-full overflow-hidden mb-4">
+                        <div id="readiness-bar" class="bg-teal-600 h-full transition-all duration-300" style="width: 0%;"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs sm:text-sm">
+                        <label class="flex items-center gap-2.5 bg-white p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-teal-400 transition">
+                            <input type="checkbox" onchange="updateReadiness()" class="rubric-check w-4 h-4 accent-teal-600 rounded shrink-0">
+                            <span>عرّفت بالوثائق (1) و(2) قبل استغلال معطياتها.</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 bg-white p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-teal-400 transition">
+                            <input type="checkbox" onchange="updateReadiness()" class="rubric-check w-4 h-4 accent-teal-600 rounded shrink-0">
+                            <span>وضعت جملة ربط منهجية قبل الفرضية مباشرة.</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 bg-white p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-teal-400 transition">
+                            <input type="checkbox" onchange="updateReadiness()" class="rubric-check w-4 h-4 accent-teal-600 rounded shrink-0">
+                            <span>صغت فرضية قصيرة ودقيقة تربط البنية بالروابط وpH الوسط.</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 bg-white p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-teal-400 transition">
+                            <input type="checkbox" onchange="updateReadiness()" class="rubric-check w-4 h-4 accent-teal-600 rounded shrink-0">
+                            <span>كتبت معادلة تفاعل CO<sub>2</sub> + H<sub>2</sub>O لإبراز سبب انخفاض pH.</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 bg-white p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-teal-400 transition">
+                            <input type="checkbox" onchange="updateReadiness()" class="rubric-check w-4 h-4 accent-teal-600 rounded shrink-0">
+                            <span>ذكرت المسافتين (8 Å و 2 Å) وتأين جذر His 146 في التفسير.</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 bg-white p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-teal-400 transition">
+                            <input type="checkbox" onchange="updateReadiness()" class="rubric-check w-4 h-4 accent-teal-600 rounded shrink-0">
+                            <span>هيكلت النص العلمي إلى (مقدمة + إشكالية، عرض، خاتمة).</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="max-w-6xl mx-auto px-3 sm:px-6 pt-2 text-center text-xs text-slate-500">
+        منصة المراجعة المنهجية التفاعلية ثلاثية الأبعاد — علوم الطبيعة والحياة (بكالوريا الجزائر)
+    </footer>
+
+    <script>
+        let currentCameraMode = 'quaternary';
+        let autoRotate = true;
+        let hbChart = null;
+        let keywordsHighlighted = false;
+
+        let scene, camera, renderer, rootGroup, quaternaryGroup, atomicGroup;
+        let subunitMeshes = [];
+        let o2Pairs = [];
+        let ionicBridges = [];
+        let hisGroup, aspGroup, protonSphere, atomicBondMesh;
+        let targetMorph = 0;
+        let currentMorph = 0;
+        let isDragging = false;
+        let prevPointer = { x: 0, y: 0 };
+        let userRotation = { x: 0.22, y: 0.42 };
+        let clockTime = 0;
+
+        function showToast(message) {
+            const toast = document.getElementById('toast-banner');
+            const textEl = document.getElementById('toast-text');
+            textEl.textContent = message;
+            toast.classList.remove('opacity-0');
+            toast.classList.add('opacity-100');
+            clearTimeout(window.toastTimeout);
+            window.toastTimeout = setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0');
+            }, 2400);
+        }
+
+        function copySectionText(elementId, successMsg) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            const cleanText = el.innerText.replace(/\n{3,}/g, '\n\n').trim();
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(cleanText).then(() => showToast(successMsg));
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = cleanText;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showToast(successMsg);
+            }
+        }
+
+        function switchTab(tabId) {
+            const tabs = ['part1', 'part2', 'part3', 'method', 'loop'];
+            tabs.forEach(t => {
+                const section = document.getElementById('tab-' + t);
+                const btn = document.getElementById('btn-' + t);
+                if (t === tabId) {
+                    section.classList.remove('hidden');
+                    btn.classList.remove('tab-inactive');
+                    btn.classList.add('tab-active');
+                } else {
+                    section.classList.add('hidden');
+                    btn.classList.remove('tab-active');
+                    btn.classList.add('tab-inactive');
+                }
+            });
+
+            if (tabId === 'part2') {
+                setTimeout(() => {
+                    if (!renderer) {
+                        init3DProtein();
+                    } else {
+                        resize3DCanvas();
+                    }
+                    if (!hbChart) {
+                        initChart();
+                    } else {
+                        hbChart.resize();
+                    }
+                }, 40);
+            }
+        }
+
+        function wrapLabel16(label) {
+            if (label.length <= 16) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let current = '';
+            words.forEach(w => {
+                if ((current + ' ' + w).trim().length <= 16) {
+                    current = (current + ' ' + w).trim();
+                } else {
+                    if (current) lines.push(current);
+                    current = w;
+                }
+            });
+            if (current) lines.push(current);
+            return lines;
+        }
+
+        function initChart() {
+            const canvas = document.getElementById('hbComparisonChart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            const rawLabels = [
+                'البنية (R) في الرئتين',
+                'البنية (T) في الأنسجة'
+            ];
+
+            hbChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: rawLabels.map(wrapLabel16),
+                    datasets: [
+                        {
+                            label: 'درجة الحموضة (pH)',
+                            data: [7.4, 7.3],
+                            backgroundColor: ['#0D9488', '#D97706'],
+                            borderRadius: 8,
+                            barPercentage: 0.46,
+                            yAxisID: 'yPh'
+                        },
+                        {
+                            label: 'المسافة His146-Asp94 (Å)',
+                            data: [8, 2],
+                            backgroundColor: ['#38BDF8', '#F43F5E'],
+                            borderRadius: 8,
+                            barPercentage: 0.46,
+                            yAxisID: 'yDist'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { family: 'Cairo', size: 11, weight: '700' },
+                                color: '#1E293B',
+                                boxWidth: 12,
+                                padding: 10
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#0F172A',
+                            titleFont: { family: 'Cairo', size: 12, weight: 'bold' },
+                            bodyFont: { family: 'Cairo', size: 11 },
+                            callbacks: {
+                                title: function(items) {
+                                    const lbl = items[0].label;
+                                    return Array.isArray(lbl) ? lbl.join(' ') : lbl;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                font: { family: 'Cairo', size: 11, weight: '700' },
+                                color: '#1E293B'
+                            },
+                            grid: { display: false }
+                        },
+                        yPh: {
+                            type: 'linear',
+                            position: 'right',
+                            min: 7.0,
+                            max: 7.6,
+                            title: {
+                                display: true,
+                                text: 'pH الدم',
+                                font: { family: 'Cairo', size: 10, weight: '700' },
+                                color: '#0D9488'
+                            },
+                            ticks: { font: { family: 'Cairo', size: 10 } }
+                        },
+                        yDist: {
+                            type: 'linear',
+                            position: 'left',
+                            min: 0,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'المسافة (Å)',
+                                font: { family: 'Cairo', size: 10, weight: '700' },
+                                color: '#E11D48'
+                            },
+                            ticks: { font: { family: 'Cairo', size: 10 } },
+                            grid: { drawOnChartArea: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function create3DTextSprite(text, bgColor, borderColor) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 96;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = bgColor || 'rgba(15, 23, 42, 0.88)';
+            ctx.strokeStyle = borderColor || 'rgba(56, 189, 248, 0.85)';
+            ctx.lineWidth = 6;
+
+            const r = 24;
+            const x = 16, y = 16, w = 224, h = 64;
+            ctx.beginPath();
+            ctx.moveTo(x + r, y);
+            ctx.lineTo(x + w - r, y);
+            ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+            ctx.lineTo(x + w, y + h - r);
+            ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            ctx.lineTo(x + r, y + h);
+            ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+            ctx.lineTo(x, y + r);
+            ctx.quadraticCurveTo(x, y, x + r, y);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 34px Cairo, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, 128, 50);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            const mat = new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false });
+            const sprite = new THREE.Sprite(mat);
+            sprite.scale.set(0.95, 0.36, 1);
+            return sprite;
+        }
+
+        function createHelixCurve(seedAngle, radiusScale) {
+            const pts = [];
+            const turns = 2.8;
+            const steps = 48;
+            for (let i = 0; i <= steps; i++) {
+                const t = i / steps;
+                const angle = seedAngle + t * Math.PI * 2 * turns;
+                const r = (0.46 + 0.18 * Math.sin(t * Math.PI)) * radiusScale;
+                const x = Math.cos(angle) * r;
+                const y = (t - 0.5) * 1.42;
+                const z = Math.sin(angle) * r;
+                pts.push(new THREE.Vector3(x, y, z));
+            }
+            return new THREE.CatmullRomCurve3(pts);
+        }
+
+        function init3DProtein() {
+            const wrapper = document.getElementById('protein-3d-wrapper');
+            const canvas = document.getElementById('protein3dCanvas');
+            if (!wrapper || !canvas || typeof THREE === 'undefined') return;
+
+            const width = wrapper.clientWidth || 420;
+            const height = wrapper.clientHeight || 310;
+
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
+            camera.position.set(0, 0.2, 6.2);
+
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.78);
+            scene.add(ambientLight);
+
+            const dirLight1 = new THREE.DirectionalLight(0xffffff, 0.95);
+            dirLight1.position.set(5, 7, 6);
+            scene.add(dirLight1);
+
+            const dirLight2 = new THREE.DirectionalLight(0x38bdf8, 0.5);
+            dirLight2.position.set(-5, -4, -5);
+            scene.add(dirLight2);
+
+            rootGroup = new THREE.Group();
+            scene.add(rootGroup);
+
+            quaternaryGroup = new THREE.Group();
+            rootGroup.add(quaternaryGroup);
+
+            const subunitSpecs = [
+                { label: 'α1', rPos: new THREE.Vector3(-1.18, 0.98, 0.35), tPos: new THREE.Vector3(-0.76, 0.68, 0.22), color: 0x06B6D4, badgeBorder: 'rgba(6,182,212,0.9)', seed: 0.2 },
+                { label: 'α2', rPos: new THREE.Vector3(1.18, -0.98, -0.35), tPos: new THREE.Vector3(0.76, -0.68, -0.22), color: 0x0284C7, badgeBorder: 'rgba(2,132,199,0.9)', seed: 1.8 },
+                { label: 'β1', rPos: new THREE.Vector3(1.18, 0.98, -0.35), tPos: new THREE.Vector3(0.76, 0.68, -0.22), color: 0x10B981, badgeBorder: 'rgba(16,185,129,0.9)', seed: 3.3 },
+                { label: 'β2', rPos: new THREE.Vector3(-1.18, -0.98, 0.35), tPos: new THREE.Vector3(-0.76, -0.68, 0.22), color: 0x059669, badgeBorder: 'rgba(5,150,105,0.9)', seed: 4.9 }
+            ];
+
+            subunitMeshes = [];
+            o2Pairs = [];
+
+            subunitSpecs.forEach(spec => {
+                const subGroup = new THREE.Group();
+                subGroup.position.copy(spec.rPos);
+
+                const curve = createHelixCurve(spec.seed, 1.0);
+                const tubeGeo = new THREE.TubeGeometry(curve, 68, 0.13, 12, false);
+                const tubeMat = new THREE.MeshStandardMaterial({
+                    color: spec.color,
+                    roughness: 0.28,
+                    metalness: 0.18
+                });
+                const tubeMesh = new THREE.Mesh(tubeGeo, tubeMat);
+                subGroup.add(tubeMesh);
+
+                const hemeGeo = new THREE.CylinderGeometry(0.24, 0.24, 0.06, 22);
+                const hemeMat = new THREE.MeshStandardMaterial({ color: 0xE11D48, roughness: 0.25, metalness: 0.35 });
+                const hemeMesh = new THREE.Mesh(hemeGeo, hemeMat);
+                hemeMesh.rotation.x = Math.PI / 3;
+                subGroup.add(hemeMesh);
+
+                const labelSprite = create3DTextSprite(spec.label, 'rgba(10, 20, 35, 0.88)', spec.badgeBorder);
+                labelSprite.position.set(0, 0.82, 0.25);
+                subGroup.add(labelSprite);
+
+                const o2Group = new THREE.Group();
+                const atomGeo = new THREE.SphereGeometry(0.115, 16, 16);
+                const atomMat = new THREE.MeshStandardMaterial({
+                    color: 0xF43F5E,
+                    emissive: 0x9F1239,
+                    emissiveIntensity: 0.4,
+                    roughness: 0.2
+                });
+                const o1 = new THREE.Mesh(atomGeo, atomMat);
+                const o2 = new THREE.Mesh(atomGeo, atomMat);
+                o1.position.set(-0.08, 0, 0);
+                o2.position.set(0.08, 0, 0);
+                o2Group.add(o1);
+                o2Group.add(o2);
+
+                const boundPos = spec.rPos.clone().normalize().multiplyScalar(0.32);
+                const releasedPos = spec.rPos.clone().normalize().multiplyScalar(1.38);
+                o2Group.position.copy(boundPos);
+                subGroup.add(o2Group);
+
+                quaternaryGroup.add(subGroup);
+                subunitMeshes.push({ group: subGroup, rPos: spec.rPos, tPos: spec.tPos });
+                o2Pairs.push({ group: o2Group, boundPos: boundPos, releasedPos: releasedPos });
+            });
+
+            const bridgePairs = [
+                [new THREE.Vector3(-0.76, 0.68, 0.22), new THREE.Vector3(0.76, 0.68, -0.22)],
+                [new THREE.Vector3(-0.76, -0.68, 0.22), new THREE.Vector3(0.76, -0.68, -0.22)],
+                [new THREE.Vector3(-0.76, 0.68, 0.22), new THREE.Vector3(-0.76, -0.68, 0.22)],
+                [new THREE.Vector3(0.76, 0.68, -0.22), new THREE.Vector3(0.76, -0.68, -0.22)]
+            ];
+
+            ionicBridges = [];
+            bridgePairs.forEach(pair => {
+                const dir = new THREE.Vector3().subVectors(pair[1], pair[0]);
+                const len = dir.length();
+                const bridgeGeo = new THREE.CylinderGeometry(0.048, 0.048, len, 10);
+                const bridgeMat = new THREE.MeshStandardMaterial({
+                    color: 0xFBBF24,
+                    emissive: 0xD97706,
+                    emissiveIntensity: 0.75,
+                    transparent: true,
+                    opacity: 0
+                });
+                const mesh = new THREE.Mesh(bridgeGeo, bridgeMat);
+                mesh.position.addVectors(pair[0], pair[1]).multiplyScalar(0.5);
+                mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
+                quaternaryGroup.add(mesh);
+                ionicBridges.push(mesh);
+            });
+
+            atomicGroup = new THREE.Group();
+            atomicGroup.visible = false;
+            rootGroup.add(atomicGroup);
+
+            hisGroup = new THREE.Group();
+            const hisRingGeo = new THREE.CylinderGeometry(0.56, 0.56, 0.14, 5);
+            const hisRingMat = new THREE.MeshStandardMaterial({ color: 0x10B981, roughness: 0.28 });
+            const hisRing = new THREE.Mesh(hisRingGeo, hisRingMat);
+            hisRing.rotation.x = Math.PI / 2;
+            hisGroup.add(hisRing);
+
+            const hisLabel = create3DTextSprite('His 146', 'rgba(6, 78, 59, 0.92)', 'rgba(16, 185, 129, 0.95)');
+            hisLabel.scale.set(1.25, 0.45, 1);
+            hisLabel.position.set(1.15, 0.1, 0);
+            hisGroup.add(hisLabel);
+
+            const nAtomGeo = new THREE.SphereGeometry(0.18, 18, 18);
+            const nAtomMat = new THREE.MeshStandardMaterial({ color: 0x3B82F6, roughness: 0.25 });
+            const nAtom = new THREE.Mesh(nAtomGeo, nAtomMat);
+            nAtom.position.set(0, -0.52, 0);
+            hisGroup.add(nAtom);
+
+            const pGeo = new THREE.SphereGeometry(0.15, 16, 16);
+            const pMat = new THREE.MeshStandardMaterial({
+                color: 0xFBBF24,
+                emissive: 0xF59E0B,
+                emissiveIntensity: 0.9,
+                transparent: true,
+                opacity: 0
+            });
+            protonSphere = new THREE.Mesh(pGeo, pMat);
+            protonSphere.position.set(0, -0.82, 0);
+            hisGroup.add(protonSphere);
+
+            hisGroup.position.set(0, 1.38, 0);
+            atomicGroup.add(hisGroup);
+
+            aspGroup = new THREE.Group();
+            const aspBodyGeo = new THREE.BoxGeometry(0.76, 0.28, 0.22);
+            const aspBodyMat = new THREE.MeshStandardMaterial({ color: 0x06B6D4, roughness: 0.28 });
+            const aspBody = new THREE.Mesh(aspBodyGeo, aspBodyMat);
+            aspGroup.add(aspBody);
+
+            const aspLabel = create3DTextSprite('Asp 94⁻', 'rgba(14, 116, 144, 0.92)', 'rgba(34, 211, 238, 0.95)');
+            aspLabel.scale.set(1.25, 0.45, 1);
+            aspLabel.position.set(1.15, -0.1, 0);
+            aspGroup.add(aspLabel);
+
+            const oxyGeo = new THREE.SphereGeometry(0.2, 18, 18);
+            const oxyMat = new THREE.MeshStandardMaterial({
+                color: 0xEF4444,
+                emissive: 0xB91C1C,
+                emissiveIntensity: 0.55
+            });
+            const oxy1 = new THREE.Mesh(oxyGeo, oxyMat);
+            oxy1.position.set(-0.28, 0.32, 0);
+            const oxy2 = new THREE.Mesh(oxyGeo, oxyMat);
+            oxy2.position.set(0.28, 0.32, 0);
+            aspGroup.add(oxy1);
+            aspGroup.add(oxy2);
+
+            aspGroup.position.set(0, -1.38, 0);
+            atomicGroup.add(aspGroup);
+
+            const aBondGeo = new THREE.CylinderGeometry(0.06, 0.06, 1.15, 12);
+            const aBondMat = new THREE.MeshStandardMaterial({
+                color: 0xFBBF24,
+                emissive: 0xD97706,
+                emissiveIntensity: 0.95,
+                transparent: true,
+                opacity: 0
+            });
+            atomicBondMesh = new THREE.Mesh(aBondGeo, aBondMat);
+            atomicGroup.add(atomicBondMesh);
+
+            setup3DPointerControls(wrapper);
+            window.addEventListener('resize', resize3DCanvas);
+            animate3D();
+        }
+
+        function setup3DPointerControls(el) {
+            el.addEventListener('pointerdown', (e) => {
+                isDragging = true;
+                prevPointer = { x: e.clientX, y: e.clientY };
+            });
+            window.addEventListener('pointermove', (e) => {
+                if (!isDragging) return;
+                const dx = e.clientX - prevPointer.x;
+                const dy = e.clientY - prevPointer.y;
+                userRotation.y += dx * 0.012;
+                userRotation.x += dy * 0.012;
+                userRotation.x = Math.max(-1.2, Math.min(1.2, userRotation.x));
+                prevPointer = { x: e.clientX, y: e.clientY };
+            });
+            window.addEventListener('pointerup', () => {
+                isDragging = false;
+            });
+        }
+
+        function resize3DCanvas() {
+            const wrapper = document.getElementById('protein-3d-wrapper');
+            if (!wrapper || !renderer || !camera) return;
+            const w = wrapper.clientWidth;
+            const h = wrapper.clientHeight;
+            if (w > 0 && h > 0) {
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+                renderer.setSize(w, h);
+            }
+        }
+
+        function reset3DView() {
+            userRotation = { x: 0.22, y: 0.42 };
+            showToast('تمت إعادة ضبط زاوية العرض 3D');
+        }
+
+        function set3DCameraMode(mode) {
+            currentCameraMode = mode;
+            const btnQuat = document.getElementById('cam-btn-quat');
+            const btnAtom = document.getElementById('cam-btn-atom');
+            const legend = document.getElementById('canvas-legend');
+
+            if (mode === 'quaternary') {
+                btnQuat.className = 'px-2.5 py-1 rounded-md text-[11px] sm:text-xs font-bold bg-cyan-600 text-white transition';
+                btnAtom.className = 'px-2.5 py-1 rounded-md text-[11px] sm:text-xs font-bold text-slate-300 hover:text-white transition';
+                if (quaternaryGroup) quaternaryGroup.visible = true;
+                if (atomicGroup) atomicGroup.visible = false;
+                if (camera) camera.position.set(0, 0.2, 6.2);
+                if (legend) {
+                    legend.innerHTML = '<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block"></span> سلسلتا α<sub>1</sub>, α<sub>2</sub></span>' +
+                        '<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span> سلسلتا β<sub>1</sub>, β<sub>2</sub></span>' +
+                        '<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span> مجموعات الهيم + O<sub>2</sub></span>' +
+                        '<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></span> روابط شاردية (T)</span>';
+                }
+            } else {
+                btnAtom.className = 'px-2.5 py-1 rounded-md text-[11px] sm:text-xs font-bold bg-cyan-600 text-white transition';
+                btnQuat.className = 'px-2.5 py-1 rounded-md text-[11px] sm:text-xs font-bold text-slate-300 hover:text-white transition';
+                if (quaternaryGroup) quaternaryGroup.visible = false;
+                if (atomicGroup) atomicGroup.visible = true;
+                if (camera) camera.position.set(0, 0, 5.4);
+                if (legend) {
+                    legend.innerHTML = '<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span> حلقة His 146 (قاعدي)</span>' +
+                        '<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></span> بروتون H<sup>+</sup> (عند pH 7.3)</span>' +
+                        '<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span> مجموعة Asp 94<sup>-</sup> (حامضي)</span>';
+                }
+            }
+        }
+
+        function toggleAutoRotate() {
+            autoRotate = !autoRotate;
+            const btn = document.getElementById('rotate-toggle-btn');
+            if (btn) {
+                btn.textContent = autoRotate ? '🔄 دوران: مفعّل' : '⏸️ دوران: متوقف';
+            }
+        }
+
+        function animate3D() {
+            requestAnimationFrame(animate3D);
+            if (!renderer || !scene || !camera) return;
+
+            clockTime += 0.05;
+            currentMorph += (targetMorph - currentMorph) * 0.1;
+
+            if (autoRotate && !isDragging) {
+                userRotation.y += 0.007;
+            }
+            if (rootGroup) {
+                rootGroup.rotation.x = userRotation.x;
+                rootGroup.rotation.y = userRotation.y;
+            }
+
+            const pulse = 0.85 + 0.15 * Math.sin(clockTime * 1.6);
+
+            subunitMeshes.forEach(item => {
+                item.group.position.lerpVectors(item.rPos, item.tPos, currentMorph);
+            });
+
+            o2Pairs.forEach((pair, idx) => {
+                pair.group.position.lerpVectors(pair.boundPos, pair.releasedPos, currentMorph);
+                if (currentMorph > 0.5) {
+                    pair.group.position.y += Math.sin(clockTime + idx) * 0.04 * currentMorph;
+                }
+                pair.group.scale.setScalar(1 - currentMorph * 0.2);
+            });
+
+            ionicBridges.forEach(b => {
+                b.material.opacity = currentMorph * 0.9 * pulse;
+                b.visible = currentMorph > 0.05;
+            });
+
+            if (hisGroup && aspGroup && protonSphere && atomicBondMesh) {
+                const ySep = 1.38 - currentMorph * 0.62;
+                hisGroup.position.y = ySep;
+                aspGroup.position.y = -ySep;
+                protonSphere.material.opacity = currentMorph;
+                protonSphere.scale.setScalar(0.5 + currentMorph * 0.5);
+                atomicBondMesh.material.opacity = currentMorph * 0.95 * pulse;
+                atomicBondMesh.visible = currentMorph > 0.08;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        function onPhSliderChange(val) {
+            const ratio = Number(val) / 100;
+            targetMorph = ratio;
+            updateBioUI(ratio);
+        }
+
+        function setBioState(state) {
+            const ratio = state === 'R' ? 0 : 1;
+            targetMorph = ratio;
+            const slider = document.getElementById('ph-morph-slider');
+            if (slider) slider.value = ratio * 100;
+            updateBioUI(ratio);
+        }
+
+        function updateBioUI(ratio) {
+            const btnR = document.getElementById('sim-btn-R');
+            const btnT = document.getElementById('sim-btn-T');
+            const badge = document.getElementById('canvas-overlay-badge');
+            const expLine = document.getElementById('sim-explanation-line');
+            const readout = document.getElementById('live-ph-readout');
+
+            const phVal = (7.40 - ratio * 0.10).toFixed(2);
+            const distVal = (8.0 - ratio * 6.0).toFixed(1);
+
+            if (readout) {
+                readout.textContent = `pH = ${phVal} | المسافة = ${distVal} Å`;
+            }
+
+            if (ratio < 0.5) {
+                btnR.className = 'px-3 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-teal-600 text-white shadow-lg ring-2 ring-teal-300 transition min-h-[44px]';
+                btnT.className = 'px-3 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-slate-800 text-slate-300 hover:bg-slate-700 transition min-h-[44px]';
+                if (badge) {
+                    badge.className = 'absolute top-2.5 right-2.5 bg-slate-950/85 backdrop-blur-sm border border-teal-500/40 text-teal-300 px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-extrabold pointer-events-none';
+                    badge.innerHTML = `البنية (R) — تثبيت O<sub>2</sub> (${distVal} Å)`;
+                }
+                if (expLine) {
+                    expLine.className = 'text-xs sm:text-sm font-bold text-teal-300 leading-relaxed';
+                    expLine.innerHTML = `عند pH = ${phVal}: يفقد His 146 بروتونه (متعادل)، تنعدم الرابطة الشاردية (${distVal} Å)، تتباعد السلاسل الأربع وتثبّت 4 جزيئات O<sub>2</sub>.`;
+                }
+            } else {
+                btnT.className = 'px-3 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-amber-600 text-white shadow-lg ring-2 ring-amber-300 transition min-h-[44px]';
+                btnR.className = 'px-3 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-slate-800 text-slate-300 hover:bg-slate-700 transition min-h-[44px]';
+                if (badge) {
+                    badge.className = 'absolute top-2.5 right-2.5 bg-slate-950/85 backdrop-blur-sm border border-amber-500/40 text-amber-300 px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-extrabold pointer-events-none';
+                    badge.innerHTML = `البنية (T) — تحرير O<sub>2</sub> (${distVal} Å)`;
+                }
+                if (expLine) {
+                    expLine.className = 'text-xs sm:text-sm font-bold text-amber-300 leading-relaxed';
+                    expLine.innerHTML = `عند pH = ${phVal}: يكتسب His 146 بروتوناً (H<sup>+</sup>)، تتشكّل رابطة شاردية مع Asp 94<sup>-</sup> (${distVal} Å)، فتتقارب السلاسل الأربع ويتحرّر O<sub>2</sub> للخلايا.`;
+                }
+            }
+        }
+
+        function toggleKeywords() {
+            keywordsHighlighted = !keywordsHighlighted;
+            const kws = document.querySelectorAll('.kw');
+            const btn = document.getElementById('kw-btn');
+            kws.forEach(el => {
+                if (keywordsHighlighted) {
+                    el.classList.add('bg-amber-200', 'text-slate-950', 'px-1.5', 'py-0.5', 'rounded');
+                } else {
+                    el.classList.remove('bg-amber-200', 'text-slate-950', 'px-1.5', 'py-0.5', 'rounded');
+                }
+            });
+            btn.textContent = keywordsHighlighted ? '✖️ إزالة التظليل' : '✨ تظليل الكلمات المفتاحية';
+        }
+
+        const loopData = {
+            1: {
+                title: '1. الملاحظة وتشخيص الفجوة',
+                desc: 'قارن مسودة إجابتك مع التعليمة بدقة: هل أجبت عن الفعل الأداتي المطلوب (قارن، فسّر، ناقش)؟ وهل ربطت الاستنتاج بالفرضية بجملة انتقال واضحة دون حشو أو إطالة؟'
+            },
+            2: {
+                title: '2. التصحيح والضبط العلمي والمنهجي',
+                desc: 'أدرج الكلمات المفتاحية الدقيقة التي يبحث عنها المصحح: البنية الرابعية، الروابط الكارهة للماء، تأين الجذر القاعدي His 146، الرابطة الشاردية مع Asp 94، والمسافتين 8 Å و 2 Å.'
+            },
+            3: {
+                title: '3. التحقق من دقة الصياغة والتسلسل',
+                desc: 'تأكّد من أن كل فقرة تنتقل بسلاسة منطقية: تعريف الوثيقة ⟵ تفكيك المعطيات الرقمية ⟵ استنتاج ⟵ جملة ربط ⟵ فرضية قصيرة وقابلة للاختبار.'
+            },
+            4: {
+                title: '4. التعميم وبناء قوالب جاهزة للبكالوريا',
+                desc: 'احفظ القوالب المنهجية التي أتقنتها هنا (جدول المقارنة، جملة الربط قبل الفرضية، هيكلة النص العلمي) لتطبيقها بسرعة وثقة في أي تمرين آخر.'
+            }
+        };
+
+        function selectLoopStep(step) {
+            [1, 2, 3, 4].forEach(i => {
+                const btn = document.getElementById('loop-step-' + i);
+                if (i === step) {
+                    btn.className = 'p-3 sm:p-4 rounded-xl border-2 border-[#163050] bg-[#163050] text-white text-right transition min-h-[76px]';
+                    btn.children[0].className = 'text-xs font-bold opacity-80';
+                } else {
+                    btn.className = 'p-3 sm:p-4 rounded-xl border-2 border-slate-200 bg-white text-slate-800 hover:border-slate-300 text-right transition min-h-[76px]';
+                    btn.children[0].className = 'text-xs font-bold text-slate-500';
+                }
+            });
+            document.getElementById('loop-detail-title').textContent = loopData[step].title;
+            document.getElementById('loop-detail-desc').textContent = loopData[step].desc;
+        }
+
+        function updateReadiness() {
+            const checks = document.querySelectorAll('.rubric-check');
+            let count = 0;
+            checks.forEach(c => { if (c.checked) count++; });
+            const pct = Math.round((count / checks.length) * 100);
+            document.getElementById('score-badge').textContent = `الجاهزية: ${count} / ${checks.length} مؤشرات (${pct}%)`;
+            document.getElementById('readiness-bar').style.width = pct + '%';
+            const headerPill = document.getElementById('header-progress-pill');
+            if (headerPill) {
+                headerPill.innerHTML = `<span>🎯</span><span>الإتقان: ${pct}%</span>`;
+            }
+        }
+    </script>
+</body>
+</html>
